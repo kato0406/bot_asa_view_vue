@@ -100,9 +100,11 @@ onBeforeMount(async () => {
     </div>
   </div>
 
-  <LineChart
-    v-if="chartData.length !== 0"
-    :key="chartData"
-    :data="chartData"
-  />
+  <template v-if="Object.keys(chartData).length !== 0">
+    <p>チャートの上のステータスを押すと対象のデータを非表示に出来ます</p>
+    <LineChart
+      :key="chartData"
+      :data="chartData"
+    />
+  </template>
 </template>

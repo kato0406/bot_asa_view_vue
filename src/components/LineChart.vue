@@ -14,7 +14,7 @@ import {
 } from 'chart.js'
 
 Chart.register(
-  Colors,
+  // Colors,
   LineController,
   LineElement,
   PointElement,
@@ -34,10 +34,38 @@ const props = defineProps({
 
 const canvasRef = ref(null)
 
+const getRandomColor = () => {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+
+  return `rgba(${r}, ${g}, ${b}, ?)`;
+}
+
 onMounted(() => {
   new Chart(canvasRef.value, {
     type: 'line',
-    data: props.data,
+    data: {
+      labels: props.data.labels,
+      datasets: props.data.datasets.map(dataset => {
+        const color = getRandomColor()
+
+        return { ...dataset, ...{
+            borderColor: color.replace('?', '.5'),
+            backgroundColor: color.replace('?', '.2')
+          }}
+      })
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
+    }
   })
 })
 </script>
