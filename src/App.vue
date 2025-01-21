@@ -1,5 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router'
+import UserView from '@/views/UserView.vue'
 
 const route = useRoute()
 </script>
@@ -44,7 +45,11 @@ const route = useRoute()
     </header>
 
     <main class="my-3">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <KeepAlive>
+          <component :is="Component" />
+        </KeepAlive>
+      </RouterView>
     </main>
   </div>
 </template>
