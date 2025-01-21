@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue'
 import {
   Chart,
-  Colors,
   LineController,
   LineElement,
   PointElement,
@@ -14,7 +13,6 @@ import {
 } from 'chart.js'
 
 Chart.register(
-  // Colors,
   LineController,
   LineElement,
   PointElement,
@@ -25,6 +23,30 @@ Chart.register(
   Legend,
 )
 
+const colors = [
+  'rgba(255, 0, 0, ?)',
+  'rgba(0, 255, 0, ?)',
+  'rgba(0, 0, 255, ?)',
+  'rgba(255, 255, 0, ?)',
+  'rgba(0, 255, 255, ?)',
+  'rgba(255, 0, 255, ?)',
+  'rgba(255, 165, 0, ?)',
+  'rgba(128, 0, 128, ?)',
+  'rgba(0, 128, 128, ?)',
+  'rgba(255, 215, 0, ?)',
+  'rgba(220, 20, 60, ?)',
+  'rgba(127, 255, 0, ?)',
+  'rgba(30, 144, 255, ?)',
+  'rgba(0, 0, 0, ?)',
+  'rgba(128, 128, 0, ?)',
+  'rgba(106, 90, 205, ?)',
+  'rgba(0, 255, 127, ?)',
+  'rgba(160, 82, 45, ?)',
+  'rgba(230, 230, 250, ?)',
+  'rgba(245, 245, 245, ?)'
+];
+
+
 const props = defineProps({
   data: {
     type: Object,
@@ -34,25 +56,15 @@ const props = defineProps({
 
 const canvasRef = ref(null)
 
-const getRandomColor = () => {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-
-  return `rgba(${r}, ${g}, ${b}, ?)`;
-}
-
 onMounted(() => {
   new Chart(canvasRef.value, {
     type: 'line',
     data: {
       labels: props.data.labels,
-      datasets: props.data.datasets.map(dataset => {
-        const color = getRandomColor()
-
+      datasets: props.data.datasets.map((dataset, index) => {
         return { ...dataset, ...{
-            borderColor: color.replace('?', '.5'),
-            backgroundColor: color.replace('?', '.2')
+            borderColor: colors[index].replace('?', '.5'),
+            backgroundColor: colors[index].replace('?', '.2')
           }}
       })
     },
