@@ -24,12 +24,14 @@ const getIssueLogs = async () => {
 
   const labels = []
   const datasets = []
-  const issueCountLogs = response.data.issue_count_logs.filter(issueCountLog => issueCountLog.user_name === userName.value)
+  const issueCountLogs = response.data.issue_count_logs.filter(
+    (issueCountLog) => issueCountLog.user_name === userName.value,
+  )
 
-  statuses.forEach(status => {
+  statuses.forEach((status) => {
     datasets.push({
       label: status,
-      data: _.map(issueCountLogs, getStatusColumn(status))
+      data: _.map(issueCountLogs, getStatusColumn(status)),
     })
   })
 
@@ -42,7 +44,7 @@ const getIssueLogs = async () => {
 
   chartData.value = {
     labels,
-    datasets
+    datasets,
   }
 }
 
@@ -66,11 +68,13 @@ const getStatusColumn = (status) => {
 }
 
 onBeforeMount(async () => {
-  const response = await axios.get('', {
-    params: {
-      route: 'users',
-    },
-  }).catch(error => console.log(error))
+  const response = await axios
+    .get('', {
+      params: {
+        route: 'users',
+      },
+    })
+    .catch((error) => console.log(error))
 
   users.value = response.data.users
   userName.value = users.value[0].name
@@ -102,9 +106,6 @@ onBeforeMount(async () => {
 
   <template v-if="Object.keys(chartData).length !== 0">
     <p>チャートの上のステータスを押すと対象のデータを非表示に出来ます</p>
-    <LineChart
-      :key="chartData"
-      :data="chartData"
-    />
+    <LineChart :key="chartData" :data="chartData" />
   </template>
 </template>

@@ -30,7 +30,7 @@ const getIssueLogs = async () => {
 
     datasets.push({
       label: userName,
-      data: _.map(issueCountLogs, column)
+      data: _.map(issueCountLogs, column),
     })
   }
 
@@ -43,7 +43,7 @@ const getIssueLogs = async () => {
 
   chartData.value = {
     labels,
-    datasets
+    datasets,
   }
 }
 
@@ -92,9 +92,6 @@ const getStatusColumn = (status) => {
 
   <template v-if="Object.keys(chartData).length !== 0">
     <p>チャートの上の名前を押すと対象のデータを非表示に出来ます</p>
-    <LineChart
-      :key="chartData"
-      :data="chartData"
-    />
+    <LineChart :key="chartData" :data="chartData" />
   </template>
 </template>

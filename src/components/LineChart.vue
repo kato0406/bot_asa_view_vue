@@ -43,15 +43,14 @@ const colors = [
   'rgba(0, 255, 127, ?)',
   'rgba(160, 82, 45, ?)',
   'rgba(230, 230, 250, ?)',
-  'rgba(245, 245, 245, ?)'
-];
-
+  'rgba(245, 245, 245, ?)',
+]
 
 const props = defineProps({
   data: {
     type: Object,
     required: true,
-  }
+  },
 })
 
 const canvasRef = ref(null)
@@ -62,22 +61,25 @@ onMounted(() => {
     data: {
       labels: props.data.labels,
       datasets: props.data.datasets.map((dataset, index) => {
-        return { ...dataset, ...{
+        return {
+          ...dataset,
+          ...{
             borderColor: colors[index].replace('?', '.5'),
-            backgroundColor: colors[index].replace('?', '.2')
-          }}
-      })
+            backgroundColor: colors[index].replace('?', '.2'),
+          },
+        }
+      }),
     },
     options: {
       scales: {
         y: {
           beginAtZero: true,
           ticks: {
-            stepSize: 1
-          }
-        }
-      }
-    }
+            stepSize: 1,
+          },
+        },
+      },
+    },
   })
 })
 </script>
