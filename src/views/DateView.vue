@@ -1,6 +1,6 @@
 <script setup>
 import { axios } from '@/utils/axios.js'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
 import { dayjs } from '@/utils/day.js'
 import UpArrowIcon from '@/components/UpArrowIcon.vue'
 import DownArrowIcon from '@/components/DownArrowIcon.vue'
@@ -29,6 +29,8 @@ const getIssueLogs = async () => {
   })
 
   issueCountLogs.value = response.data.issue_count_logs
+
+  sort('assign_count', true)
 }
 
 const sort = (column, isDesc) => {
@@ -55,6 +57,8 @@ onBeforeMount(async () => {
   })
 
   users.value = response.data.users
+
+  await getIssueLogs()
 })
 </script>
 
@@ -62,16 +66,15 @@ onBeforeMount(async () => {
   <div class="row mb-3">
     <div class="col-4">
       <label for="date" class="form-label">日付</label>
-      <input id="date" type="date" class="form-control" v-model="date" />
-    </div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-4 offset-4 text-center">
-      <button type="button" @click="getIssueLogs" class="btn btn-primary">表示</button>
+      <input @change="getIssueLogs" id="date" type="date" class="form-control" v-model="date" />
     </div>
   </div>
 
   <table v-if="issueCountLogs.length" class="table">
+    <caption class="caption-top p-0">
+      全体のチケット状況を見て件数の多い所を司会者が指摘<br />
+      例) ○さんの担当チケットが多い、○さんの期限切れチケットが多いなど
+    </caption>
     <thead>
       <tr>
         <th>&nbsp;</th>

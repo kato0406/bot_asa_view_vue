@@ -1,13 +1,13 @@
 <script setup>
 import { axios } from '@/utils/axios.js'
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import LineChart from '@/components/LineChart.vue'
 import { dayjs } from '@/utils/day.js'
 import _ from 'lodash'
 
 const statuses = ['担当チケット', '今週期限', '処理済み', '期限切れ', '期限日変更', '追加', '消化']
 const status = ref(statuses[0])
-const fromDate = ref(dayjs().lastMonday().subtract(1, 'week').format('YYYY-MM-DD'))
+const fromDate = ref(dayjs().lastMonday().subtract(4, 'week').format('YYYY-MM-DD'))
 const toDate = ref(dayjs().lastMonday().format('YYYY-MM-DD'))
 const chartData = ref({})
 
@@ -65,33 +65,35 @@ const getStatusColumn = (status) => {
       return 'close_count'
   }
 }
+
+onBeforeMount(async () => {
+  await getIssueLogs()
+})
 </script>
 
 <template>
   <div class="row mb-3">
     <div class="col-4">
       <label for="date" class="form-label">項目</label>
-      <select class="form-control" v-model="status">
+      <select @change="getIssueLogs" class="form-control" v-model="status">
         <option v-for="status in statuses" :key="status">{{ status }}</option>
       </select>
     </div>
     <div class="col-4">
       <label for="date" class="form-label">日付</label>
-      <input id="date" type="date" class="form-control" v-model="fromDate" />
+      <input @change="getIssueLogs" id="date" type="date" class="form-control" v-model="fromDate" />
     </div>
     <div class="col-4">
       <label for="date" class="form-label">日付</label>
-      <input id="date" type="date" class="form-control" v-model="toDate" />
-    </div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-4 offset-4 text-center">
-      <button type="button" @click="getIssueLogs" class="btn btn-primary">表示</button>
+      <input @change="getIssueLogs" id="date" type="date" class="form-control" v-model="toDate" />
     </div>
   </div>
 
-  <template v-if="Object.keys(chartData).length !== 0">
-    <p>チャートの上の名前を押すと対象のデータを非表示に出来ます</p>
+  <figure v-if="Object.keys(chartData).length !== 0" class="figure w-100">
+    <figcaption class="figure-caption fs-6">
+      チケット件数の推移を確認し、件数が高いまま変わっていなかったり、上昇傾向にある人が居たら指摘する<br />
+      ※チャートの上の名前を押すと対象のデータを非表示に出来ます
+    </figcaption>
     <LineChart :key="chartData" :data="chartData" />
-  </template>
+  </figure>
 </template>
