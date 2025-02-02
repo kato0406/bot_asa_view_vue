@@ -16,7 +16,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'docs'
+    outDir: './'
   },
-  base: 'bot_asa_view_vue/docs'
+  base: 'bot_asa_view_vue'
 })
