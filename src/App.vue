@@ -42,7 +42,7 @@ const currentTab = ref(1)
             type="button"
             class="nav-link"
             :class="{ active: currentTab === 4 }"
-          >担当者フィルタ</button>
+          >設定</button>
         </li>
       </ul>
     </header>

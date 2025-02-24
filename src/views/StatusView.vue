@@ -11,7 +11,31 @@ const fromDate = ref(dayjs().lastMonday().subtract(4, 'week').format('YYYY-MM-DD
 const toDate = ref(dayjs().lastMonday().format('YYYY-MM-DD'))
 const chartData = ref({})
 
+const changeFromDate = () => {
+  if (dayjs(fromDate.value).day() !== 1) {
+    alert('月曜日を指定してください')
+
+    return
+  }
+
+  getIssueLogs()
+}
+
+const changeToDate = () => {
+  if (dayjs(toDate.value).day() !== 1) {
+    alert('月曜日を指定してください')
+
+    return
+  }
+
+  getIssueLogs()
+}
+
 const getIssueLogs = async () => {
+  if (dayjs(fromDate.value).day() !== 1 && dayjs(toDate.value).day() !== 1) {
+    return
+  }
+
   const response = await axios.get('', {
     params: {
       route: 'issue_count_logs.status',
@@ -81,11 +105,11 @@ onBeforeMount(async () => {
     </div>
     <div class="col-4">
       <label for="date" class="form-label">日付</label>
-      <input @change="getIssueLogs" id="date" type="date" class="form-control" v-model="fromDate" />
+      <input @change="changeFromDate" id="date" type="date" class="form-control" v-model="fromDate" />
     </div>
     <div class="col-4">
       <label for="date" class="form-label">日付</label>
-      <input @change="getIssueLogs" id="date" type="date" class="form-control" v-model="toDate" />
+      <input @change="changeToDate" id="date" type="date" class="form-control" v-model="toDate" />
     </div>
   </div>
 
